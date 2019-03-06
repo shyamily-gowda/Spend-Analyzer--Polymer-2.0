@@ -1,0 +1,39 @@
+{
+	"status": 1,
+	"data": {
+		"transactions": [{
+				"transactionId": "TXN002",
+				"transactionDate": "229-08-2018 10:48:31",
+				"description": "Transfer",
+				"amount": 200,
+				"paymentType": "CREDIT",
+				"closingBalance": 1000,
+				"category": {
+					"id": 5,
+					"value": "Misc"
+				}
+			},
+			{
+				"transactionId": "TXN001",
+				"transactionDate": "229-08-2018 10:39:29",
+				"description": "COLD",
+				"amount": 200,
+				"paymentType": "DEBIT",
+				"closingBalance": 800,
+				"category": {
+					"id": 2,
+					"value": "Grocery"
+				}
+			}
+		],
+		"totalTxns": [{
+				"type": "CREDIT",
+				"amount": 200
+			},
+			{
+				"type": "DEBIT",
+				"amount": 200
+			}
+		]
+	}
+}

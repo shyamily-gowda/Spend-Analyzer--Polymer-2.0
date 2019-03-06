@@ -1,0 +1,172 @@
+<!-- 
+    This is single place to configure APIs of project
+    It will also switch between environments 
+        - Devleopment
+        - production
+    It will frame api url's between production and development
+    Pass user object to form url's accordingly
+
+    ////////////////////////////////////////////////////////////
+    DEVELOPERS : USE PORT 9011
+    ///////////////////////////////////////////////////////////
+    
+    It identifies environment on basis of port  
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="api-config">
+    <script>
+        class ApiConfig extends Polymer.Element {
+
+            constructor() {
+                super();
+                // NOTE: Completed but, before state is also preserved in 
+                // files.
+
+                // this._updateURLs();
+                // setTimeout(()=>{
+                // this._updateURLs();
+                // console.log(this.environment);
+                // console.log(this.rootPath);
+                // console.log(JSON.stringify(this.user));
+                // }, 1000);
+            }
+
+            static get is() {
+                return 'api-config'
+            }
+
+            static get properties() {
+                return {
+                    rootPath: {
+                        type: String,
+                        observer: '_defineEnvironment'
+                    },
+                    user: {
+                        type: Object,
+                        observer: '_userUpdated'
+                    },
+                    environment: {
+                        type: String,
+                        observer: '_envUpdated'
+                    },
+                    prodBaseURL: {
+                        type: String,
+                        value: "http://192.168.43.118:8080"
+                    },
+                    apiCollection: {
+                        type: Object,
+                        notify: true,
+                    }
+                };
+            }
+
+            _defineEnvironment(newVal, oldVal) {
+                // return (rootPath.indexOf('9011') === -1) ? "production" : "development";
+                if (newVal) {
+                    const environment = (this.rootPath.indexOf('9011') === -1) ? "production" : "development";
+                    this.set("environment", environment)
+                }
+            }
+
+            _userUpdated(newUser, oldUser) {
+                // console.log(`newUser: ${newUser} oldUser: ${oldUser}`);
+                newUser = newUser || {};
+                oldUser = oldUser || {};
+                if (newUser.customerId !== oldUser.customerId) {
+                    this._updateURLs();
+                }
+
+            }
+
+            _envUpdated(newEn, oldEn) {
+                // console.log(`newEnvironment: ${newEn} oldEnvironment: ${oldEn}`);
+                if (newEn !== oldEn) {
+                    this._updateURLs();
+                }
+            }
+
+            _updateURLs() {
+                console.log(this.environment)
+                let apiCollection = {};
+                if (this.environment == "production") {
+                    const baseURL = this.prodBaseURL;
+                    const customerId = (this.user) ? this.user.customerId : 0;
+                    apiCollection = {
+                        "login"         : { "url"     : `${baseURL}/user/login`,
+                                            "method"  : "POST"
+                                          },
+                        "payment"       : { "url"     : `${baseURL}/user/${customerId}/makepayment`,
+                                            "method"  : "POST"
+                                          },
+                        "transactions"  : { "url"     : `${baseURL}/user/${customerId}/transactions`,
+                                            "method"  : "GET"
+                                          },
+                        "analyser"      : { "url"     : `${baseURL}/user/${customerId}/transactionsummary`,
+                                            "method"  : "GET"
+                                          },
+                        "periods"       : {
+                                            "url"     : `${baseURL}/user/${customerId}/getperiods`,
+                                            "method"  : "GET"
+                                          },
+                        "currentmonth"       : {
+                                            "url"     : `${baseURL}/user/${customerId}/currentmonth`,
+                                            "method"  : "POST"
+                        },
+                        "previousMonths" : {
+                                            "url"     : `${baseURL}/user/${customerId}/previousmonth`,
+                                            "method"  : "GET" 
+                        },
+                        "categories" : {
+                                            "url"     : `${baseURL}/user/getcategorylist`,
+                                            "method"  : "GET" 
+                        }
+
+                    }; 
+                }
+                else {
+                    apiCollection = {
+                        "login"         : { "url"     : `src/data/login-success.json`,
+                                            "method"  : "GET"
+                                          },
+                        "payment"       : { "url"     : `src/data/payment.json`,
+                                            "method"  : "GET"
+                                          },
+                        "transactions"  : { "url"     : `src/data/history.json`,
+                                            "method"  : "GET"
+                                          },
+                        "analyser"      : { "url"     : `src/data/analyser.json`,
+                                            "method"  : "GET"
+                                          },
+                        "periods"       : {
+                                            "url"     : `src/data/periods.json`,
+                                            "method"  : "GET"
+                        },
+                        "currentmonth"       : {
+                                            "url"     : `src/data/currentmonth.json`,
+                                            "method"  : "GET"
+                        },
+                        "previousmonth"       : {
+                                            "url"     : `src/data/previousmonths.json`,
+                                            "method"  : "GET"
+                        },
+                        "categories"       : {
+                                            "url"     : `src/data/categories.json`,
+                                            "method"  : "GET"
+                        },
+                        "spendcategory"       : {
+                                            "url"     : `src/data/spendcategory.json`,
+                                            "method"  : "GET"
+                        }   
+                    };
+                }
+                this.set('apiCollection', apiCollection);
+                this.notifyPath('apiCollection.*');
+                console.log(this.apiCollection);
+            }
+        }
+
+        window.customElements.define(ApiConfig.is, ApiConfig);
+    </script>
+</dom-module>

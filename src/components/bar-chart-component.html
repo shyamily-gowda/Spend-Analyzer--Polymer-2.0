@@ -1,0 +1,105 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<script src="../../bower_components/amcharts/dist/amcharts/amcharts.js"></script>
+<script src="../../bower_components/amcharts/dist/amcharts/themes/light.js"></script>
+<script src="../../bower_components/amcharts/dist/amcharts/serial.js"></script>
+
+<dom-module id="barchart-component">
+    <template>
+        <style> 
+            #chartdiv {
+                width: 60%;
+                height: 500px;
+                margin:0 auto;
+                background-color: white;
+                -webkit-box-shadow: 2px 2px 14px -4px rgba(0,0,0,0.75);
+                -moz-box-shadow: 2px 2px 14px -4px rgba(0,0,0,0.75);
+                box-shadow: 2px 2px 14px -4px rgba(0,0,0,0.75);
+            }
+            .amcharts-chart-div a{
+                display: none !important;
+            }              
+        </style>   
+        <div id="chartdiv"></div>                           
+    </template>
+    <script>
+        class barchartComponent extends Polymer.Element{
+            static get is(){ return 'barchart-component'}
+            static get properties(){
+                return  {
+                   spendChart : {},
+                   transactions: {
+                       type:Array,
+                       observer:'_configureChart'
+                   }
+                }
+            }
+
+            ready(){
+                super.ready();
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                })
+            }
+            
+            // Configure chart from transaction data
+            _configureChart(){                 
+                let chart = this.$.chartdiv;                 
+                this.spendChart = AmCharts.makeChart(chart, {
+                    "theme": "light", 
+                    "type": "serial",                    
+                    "dataProvider":this.transactions,
+                    "valueAxes": [{
+                        //"stackType": "3d",
+                        "unit": "",
+                        "position": "left",
+                        "title": "Amount",
+                        "autoGridCount" :false,
+                        "minimum"   : 0,
+                        "strictMinMax": true
+                    }],
+                    // legend: {
+                    //    // useGraphSettings: true,
+                    //     "data":[{
+                    //         "title":"Credit",
+                    //         "color":"#ff6600"
+                    //     },{
+                    //         "title":"Debit",
+                    //         "color":"#42417a"
+                    //     }]
+                    // },
+                    // set startDuration to 0 on older browsers
+                    "startDuration": this._supportSVG()? 1 : 0,                                 
+                    "depth3D": 60,
+                    "angle": 30,
+                    "categoryField": "type",
+                    "graphs": [{
+                        "balloonText": "Amount in [[category]]: <b>[[value]]</b>",
+                        "fillAlphas": 1,                       
+                        "title": "Amount",
+                        "type": "column",
+                        "fixedColumnWidth": 50,//adjusts with of the column
+                        "colorField": "catcolor", //change color
+                        "lineColorField":"catcolor",
+                        "valueField": "amount"
+                    }
+                    // , {
+                    //     "balloonText": "Debit in [[category]]: <b>[[value]]</b>",
+                    //     "fillAlphas": 1,                       
+                    //     "title": "Debit",
+                    //     "type": "column",
+                    //     "colorField": "Dcolor",//change color
+                    //     "lineColorField":"Dcolor",
+                    //     "fixedColumnWidth": 50,
+                    //     "valueField": "totalOutgoing"
+                    // }
+                    ]                     
+                });                
+            }
+            // Check for SVG support in old browser
+            _supportSVG(){
+                return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
+            }
+        };
+        window.customElements.define(barchartComponent.is,barchartComponent);
+    </script>
+</dom-module>

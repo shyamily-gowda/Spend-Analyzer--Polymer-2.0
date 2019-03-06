@@ -1,0 +1,200 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="sub-header.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="common-styles.html">
+<link rel="import" href="no-data-found.html">
+
+
+
+<dom-module id="payment-history">
+    <template>
+        <style include="common-styles">    
+        </style>
+        <style include="shared-styles">
+         
+        </style>
+
+        <!-- <iron-ajax auto url="src/data/history.json" handle-as="json" last-response="{{users}}" on-response="handleResponse"></iron-ajax>  -->
+        <!-- <iron-ajax id="transHistory" method="GET" handle-as="json" last-response="{{users}}" on-response="handleResponse"></iron-ajax> -->
+        <iron-ajax id="transHistory" method="[[api.method]]" handle-as="json" last-response="{{users}}" on-response="handleResponse"></iron-ajax>
+
+        <sub-header></sub-header>
+        <div class="container fntFamily">
+            <h2 class="centerText"> Most Recent Transactions </h2>
+
+        <template is="dom-if" if="{{!dataAvailable}}">
+            <no-data-found></no-data-found>
+        </template>
+        <template is="dom-if" if="{{dataAvailable}}">    
+          <vaadin-grid id="grid" class="gridBorder" theme="row-dividers" items="[[users.data]]" page-size="10" height-by-rows>
+           <vaadin-grid-column width="1em">
+                <template class="header">
+                    <b>Transaction Id</b>
+                </template>
+                <template>[[item.transactionId]]</template>
+            </vaadin-grid-column>
+            
+            <vaadin-grid-column width="2em">
+                <template class="header">
+                    <b>Transaction Description</b>
+                </template>
+                <template>[[item.description]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column width="1em">
+                <template class="header">
+                    <b>Transaction Type</b>
+                </template>
+                <template>[[item.paymentType]]</template>
+            </vaadin-grid-column>
+    
+            <vaadin-grid-column width="8em">
+                <template class="header">
+                    <b>Transaction Date</b>
+                </template>
+                <template>[[item.transactionDate]]</template>
+            </vaadin-grid-column>
+    
+            <vaadin-grid-column width="1em">
+                <template class="header">
+                    <b path="amount">Amount</b>
+                </template>
+                <template>[[addCurrency(item.transactionAmount)]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column width="1em">
+                <template class="header">
+                    <b path="balance">Balance</b>
+                </template>
+                <template>[[addCurrency(item.closingBalance)]]</template>
+            </vaadin-grid-column>
+        </vaadin-grid>
+        </template>
+       <!-- <div id="pages">
+            <button on-click="_prev">&lt;</button>
+            <template is="dom-repeat" items="[[pages]]">
+            <button on-click="_select" selected$="[[_isSelected(page, item)]]">[[item]]</button>
+            </template>
+            <button on-click="_next">&gt;</button>
+        </div> -->
+      </div>
+    </template>
+
+  <script>
+    class paymentHistory extends Polymer.Element {
+      static get is() { return 'payment-history'; }
+      static get properties () {
+        return {
+          items: {
+            type    : Array
+          },
+          dataAvailable: {
+              type: Boolean
+          },
+          api : {
+              type    : Object
+          },
+          pages: {
+            type    : Array
+          },
+          page: {
+            type    : Number
+          },
+          user: {
+            type    : Object
+          },
+		      custId:{
+            type    : String,
+            computed: '_getCustId(user)'
+          },
+		  activated: {
+              type: Boolean,
+              observer: '_activationChanged'
+          }
+        };
+      }
+
+      _getCustId(user){
+        return user.customerId;
+      } 
+	  
+	  _activationChanged(newVal, oldVal){
+		console.log('values::', newVal, oldVal);
+		if(newVal){
+			this._getTransactionData();  
+		}
+	  }	
+
+      _getTransactionData(){
+        let ajax = this.$.transHistory;
+        //ajax.url = "src/data/analyser.json";
+        // ajax.url = "http://192.168.43.118:8080/user/"+this.custId+"/transactions";
+        ajax.url = this.api.url;
+        ajax.generateRequest(); //trigger the iron-ajax                
+      }
+
+      // Add currency
+      addCurrency(amount){
+        return '$' + amount;
+      }
+
+      handleResponse(event,request){
+        this.items = request.response.data;
+        let dataAvailable = this.items.length ? true : false;
+        console.log(dataAvailable);
+        this.set('dataAvailable', dataAvailable)
+      }
+
+      constructor(){
+        super();
+        this.page = 0;
+      }
+
+	    // static get observers() {
+      //     return [
+      //       '_itemsChanged(items, page)'
+      //     ]
+      //   }
+
+      // _isSelected(page, item) {
+      //   return page === item - 1;
+      // }
+
+      // _select(e) {
+      //   this.page = e.model.item - 1;
+      // }
+
+      // _next() {
+      //   this.page = Math.min(this.pages.length - 1, this.page + 1);
+      // }
+
+      // _prev() {
+      //   this.page = Math.max(0, this.page - 1);
+      // }
+
+      // _itemsChanged(items, page) {
+      //   if (items === undefined || page === undefined) {
+      //     return;
+      //   }
+
+      //   if (!this.pages) {
+      //     this.pages = Array.apply(null, {length: Math.ceil(items.length / this.$.grid.pageSize)}).map(function(item, index) {
+      //       return index + 1;
+      //     });
+      //   }
+
+      //   var start = page * this.$.grid.pageSize;
+      //   var end = (page + 1) * this.$.grid.pageSize;
+      //   this.$.grid.items = items.slice(start, end);
+      // }    
+    }
+    window.customElements.define(paymentHistory.is, paymentHistory);
+  </script>
+</dom-module>

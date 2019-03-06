@@ -1,0 +1,176 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="common-styles">
+    <template>
+        
+      <style>
+
+          .fntFamily{
+              font-size: 16px;
+              font-family: Arial, Helvetica, sans-serif;
+              /* color:#444444; */
+          }
+
+          .fontBold{
+              font-weight:bold
+          }
+          .primaryBgColor{
+              background-color:#ff6600;
+          }
+          .secondaryBgColor{
+              background-color: #42417a;
+          }
+          
+          /* STYLE-PATTERN-1: This is for links that seems like pill-tabs or buttons
+          here we are using secondary-color as our indegredient. We can also use
+          primary-color for similar pattern */
+
+          .secondaryLinkButton {
+            display: flex;
+            display: -webkit-flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            height:2.2em;
+            width: 80%;
+            border-radius: 5px;
+          }
+          
+          .secondaryLinkButton:hover {
+              opacity:0.8;
+          }
+          
+          .secondaryLinkButtonActive {
+            background-color: #42417a;
+            color: #ffffff;
+          }
+          .secondaryLinkButtonInactive {
+            background-color: #ffffff;
+            color: #42417a;
+          }
+
+          /* STYLE-PATTERN-1 ENDS */
+          
+          .primaryButton {
+            display: flex;
+            display: -webkit-flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            height:2.2em;
+            border-radius:5px;
+            background-color: #ff6600;
+            color:#ffffff;
+            border: none;
+            width:90%;
+            cursor: pointer;
+          }
+
+          .primaryButton:hover {
+            opacity: 0.8;
+          }
+
+          
+          .height100{
+              height:6.25em; 
+          }
+
+          .height50{
+              height:3.12em;
+          }
+          .fnt14{
+              font-size:14px;
+          }
+
+          .boxShadow{
+            -webkit-box-shadow: 2px 2px 25px -4px rgba(0,0,0,0.75);
+            -moz-box-shadow: 2px 2px 25px -4px rgba(0,0,0,0.75);
+            box-shadow: 2px 2px 25px -4px rgba(0,0,0,0.75);
+          }          
+        .heading {
+            padding-top: 3.4375rem;
+            margin-bottom: 0;
+            padding-left: 3.125rem;
+        }
+        form {
+            /* border: 3px solid #f1f1f1; */
+            padding: 1.2rem 3.125rem 3.125rem 3.125rem;
+            border-radius: 10px;
+        }  
+        .label {
+            margin-bottom: 0;
+        }
+
+        hr {
+            width: 78%;
+            border: 2px solid #FF6600 ;
+            border-radius: 5px;
+        }
+        .container {
+            border-radius: 10px;
+            width: 25em;           
+            margin: 6.25em auto;    
+            margin-top: 0em;
+			min-height: 400px;
+        }
+
+        .whiteBckgrnd {
+            background-color: #ffffff;
+        }
+
+        /*Button styles*/
+
+        .btnPrl {
+            display: block;
+            /* padding: 0.625rem 1.5625rem 0.625rem 1.5625rem; */
+            margin: 2.25em auto 0 auto;           
+            border-radius: 10px;
+            background-color:#42417A;
+            color: white;
+            border: 1px solid #42417A;
+            text-align:center;
+            width:60%;
+            cursor: pointer;
+        }
+
+        .btnPrl:hover {
+            background-color:rgb(51, 51, 97);
+        }
+
+        .btnPrl[disabled] {
+            background-color: #c3c0c0 !important;
+            color: #000;
+            border: 1px solid #c3c0c0;
+            cursor: auto;
+            pointer-events: none;
+            text-transform: capitalize !important;
+        }
+          
+        .centerText{
+            text-align:center;
+        }
+
+
+        /*/Float styles*/
+
+        .floatRight{
+            float:right
+        }
+
+        .floatLeft{
+            float:left
+
+        }
+        .info-txt{
+            color: #17a2b8;
+
+        }
+          
+        </style>
+    </template>
+</dom-module>

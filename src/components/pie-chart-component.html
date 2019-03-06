@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../../bower_components/google-chart/google-chart-loader.html">
+<link rel="import" href="../../bower_components/google-chart/google-chart-styles.html">
+
+
+<script src="../../bower_components/amcharts/dist/amcharts/amcharts.js"></script>
+<script src="../../bower_components/amcharts/dist/amcharts/themes/light.js"></script>
+<script src="../../bower_components/amcharts/dist/amcharts/serial.js"></script>
+<script src="../../bower_components/amcharts/dist/amcharts/pie.js"></script>
+
+<dom-module id="piechart-component">
+    <template>
+        <style> 
+            div#chartContainer {
+                margin-left: 350px;
+                right: 0;
+                left: 0;
+                position: relative;
+            }
+            h2{
+                text-align: center;
+                margin-top:25px;
+            }
+
+             #chartdiv {
+                width: 60%;
+                height: 500px;
+                margin:0 auto;
+                background-color: white;
+                -webkit-box-shadow: 2px 2px 14px -4px rgba(0,0,0,0.75);
+                -moz-box-shadow: 2px 2px 14px -4px rgba(0,0,0,0.75);
+                box-shadow: 2px 2px 14px -4px rgba(0,0,0,0.75);
+            }
+            .amcharts-chart-div a{
+                display: none !important;
+            }     
+        </style> 
+        <h2>Chart View for Spend Analyser</h2>
+        <div id="chartdiv"></div>
+    </template>
+    <script>
+        class piechartComponent extends Polymer.Element{
+            static get is(){ return 'piechart-component'}
+            static get properties(){
+                return  {
+                   transactions: {
+                       type:Array,
+                       observer:'_configureChart'
+                   }
+                }
+            }
+            
+            _configureChart(){                 
+                let chart = this.$.chartdiv;    
+                console.log('in chart',this.transactions)
+                this.spendChart = AmCharts.makeChart(chart, {
+                    "type": "pie",
+                    "startDuration": 0,
+                    "theme": "light",
+                    "addClassNames": true,
+                    "legend":{
+                        "position":"right",
+                        "marginRight":100,
+                    },
+					  "dataProvider": this.transactions,
+					  "valueField": "amount",
+                      "colorField": "catcolor",
+					  "titleField": "type",
+					   "balloon":{
+					   "fixedPosition":true
+					  }
+					});   
+            }
+            
+ 
+        };
+        window.customElements.define(piechartComponent.is,piechartComponent);
+    </script>
+</dom-module>

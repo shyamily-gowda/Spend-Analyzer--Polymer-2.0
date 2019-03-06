@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "value": "CURRENT"
+    },
+    {
+        "id": 2,
+        "value": "PERIODIC"
+    },
+    {
+        "id": 3,
+        "value": "MONTHLY"
+    }
+]

@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="common-styles.html">
+
+<dom-module id="footer-component">
+    <template>
+        <style include="common-styles">
+            .footer{
+                width: 100%;                
+                background-color: #ff6600;
+                position: relative;
+                            }    
+            .footer div{
+                position: absolute;
+                left: 50%;   
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);                
+            }            
+            .footer img{
+                height: 25px;
+                width: 25px;
+            }
+            .copyright{
+                text-align: center;
+                font-size: 14px;
+                margin-top:10px;
+            }
+        </style>
+        <div class="footer content height50">
+            <div>
+                <img src="src/images/twitter-icon.png"/>
+                <img src="src/images/fb-icon.png"/>
+                <img src="src/images/youtube-icon.png"/>
+            </div>
+        </div>        
+    </template>
+    <script>
+        class footerComponent extends Polymer.Element{
+            static get is(){ return 'footer-component'}
+            static get properties(){
+                
+            }
+
+            ready(){
+                super.ready();
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                    
+                })
+            }
+        };
+        window.customElements.define(footerComponent.is,footerComponent);
+    </script>
+</dom-module>

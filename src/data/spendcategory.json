@@ -1,0 +1,15 @@
+{
+    "status": 1,
+    "data": {
+        "analysis": [
+            {
+                "category": "Misc",
+                "amount": 200
+            },
+            {
+                "category": "Grocery",
+                "amount": 200
+            }
+        ]
+    }
+}
